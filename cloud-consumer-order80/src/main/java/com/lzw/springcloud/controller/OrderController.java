@@ -9,18 +9,18 @@ import javax.annotation.Resource;
 
 @RestController
 public class OrderController {
-    private static final String PAYMENT_URL="http://localhost:8001/payment";
+    private static final String PAYMENT_URL="http://cloud-payment-service";
 
     @Resource
     private RestTemplate restTemplate;
 
     @GetMapping("/consumer/payment/save")
     public CommentResult savePayment(@RequestBody Payment payment){
-        return restTemplate.postForObject(PAYMENT_URL+"/save",payment,CommentResult.class);
+        return restTemplate.postForObject(PAYMENT_URL+"/payment/save",payment,CommentResult.class);
     }
     @GetMapping("/consumer/payment/get/{id}")
     public CommentResult<Payment> selectById(@PathVariable("id") Long id){
-        return  restTemplate.getForObject(PAYMENT_URL+"/get/"+id,CommentResult.class);
+        return  restTemplate.getForObject(PAYMENT_URL+"/payment/get/"+id,CommentResult.class);
     }
 }
 
