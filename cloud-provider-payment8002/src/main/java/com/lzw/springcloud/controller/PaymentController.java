@@ -39,4 +39,10 @@ public class PaymentController {
             return new CommentResult<>(202,"查询成功,serverPort:"+serverPort, payment);
         }
     }
+
+    @GetMapping("/get/port")
+    public String getPort(){
+        return serverPort;
+    }
+
 }
