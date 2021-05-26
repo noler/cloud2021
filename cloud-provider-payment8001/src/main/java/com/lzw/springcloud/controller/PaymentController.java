@@ -42,7 +42,8 @@ public class PaymentController {
 
 
     @GetMapping("/get/port")
-    public String getPort(){
+    public String getPort() throws InterruptedException {
+        Thread.sleep(3000);
         return serverPort;
     }
 
