@@ -56,4 +56,9 @@ public class ZabbixServiceImpl  implements IZabbixService {
         return result;
     }
 
+    @Override
+    public Map<String, Object> call98(String method, Map<String, Object> params) {
+        return null;
+    }
+
 }

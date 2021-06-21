@@ -1,18 +1,17 @@
 package com.lzw.springcloud;
 
-import com.lzw.rule.MyRule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
-import org.springframework.cloud.netflix.ribbon.RibbonClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableEurekaClient
-@RibbonClient(name = "cloud-payment-service",configuration = MyRule.class)
 @EnableHystrix
-public class OrderMain80 {
+@EnableFeignClients
+public class HystrixOrder80Main {
     public static void main(String[] args) {
-        SpringApplication.run(OrderMain80.class,args);
+        SpringApplication.run(HystrixOrder80Main.class, args);
     }
 }
