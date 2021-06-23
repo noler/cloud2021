@@ -23,9 +23,15 @@ public class PaymentHystrixController {
     private PaymentFeignService paymentFeignService;
 
 
-
+    @HystrixCommand(
+            commandProperties = {
+                    @HystrixProperty(name="circuitBreaker.enabled",value = "true"),
+                    @HystrixProperty(name="circuitBreaker.requestVolumeThreshold",value = "10"),
+                    @HystrixProperty(name="circuitBreaker.sleepWindowInMilliseconds", value = "10000"),
+                    @HystrixProperty(name="circuitBreaker.errorThresholdPercentage",value="60")
+            }
+    )
     @GetMapping("/consumer/hystrix/ok/{id}")
-    @HystrixCommand
     public String paymentInfo_Ok(@PathVariable("id") Integer id){
 
         String result = paymentFeignService.paymentInfo_Ok(id);
