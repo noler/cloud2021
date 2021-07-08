@@ -7,10 +7,10 @@ spring:
     name: cloud-payment-service
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
-    driver-class-name: org.gjt.mm.mysql.Driver              # mysql驱动包
-    url: jdbc:mysql://localhost:3306/mycloud?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: root
-    password: root
+    driver-class-name: oracle.jdbc.driver.OracleDriver              # mysql驱动包
+    url: jdbc:oracle:thin:@136.5.178.78:8443:orcl
+    username: zabbix
+    password: Ustc9.V2019#LpswJt
 
 eureka:
   client:
@@ -23,3 +23,8 @@ eureka:
   instance:
     instance-id: utils9001
     prefer-ip-address: true
+mybatis:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+
+outfile:
+  path: F:/项目资料/电信号码平台/月报/7月份

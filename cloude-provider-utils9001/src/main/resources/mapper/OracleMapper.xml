@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lzw.springcloud.mapper.OracleMapper" >
+
+    <select id="getDatabaseCpu" resultType="map">
+        select cbs.sys_name bussise,
+        round(avg(tr.value_avg),2) valueAvg,
+        round(max(tr.value_max),2) valueMax
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and instr(ch.server_usage, '数据库') > 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+        -- and instr(it.key_, 'vm.memory.pused') > 0
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+        and instr(it.key_, 'system.cpu.util.use') > 0
+        and tr.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and tr.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        -- and tr.clock > 1588262400 and tr.clock &lt; 1590940799
+        group by cbs.sys_name
+    </select>
+
+    <select id="getApplicationCpu" resultType="map">
+        select cbs.sys_name bussise,
+        round(avg(tr.value_avg),2) valueAvg,
+        round(max(tr.value_max),2) valueMax
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and instr(ch.server_usage, '数据库') = 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+        -- and instr(it.key_, 'vm.memory.pused') > 0
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+        and instr(it.key_, 'system.cpu.util.use') > 0
+        and tr.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and tr.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        -- and tr.clock > 1588262400 and tr.clock &lt; 1590940799
+        group by cbs.sys_name
+    </select>
+
+
+
+    <select id="getDatabaseMemory" resultType="map">
+        select cbs.sys_name bussise,
+        round(avg(tr.value_avg),2) valueAvg,
+        round(max(tr.value_max),2) valueMax
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and instr(ch.server_usage, '数据库') > 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+        and instr(it.key_, 'vm.memory.pused') > 0
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        and tr.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and tr.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        -- and tr.clock > 1588262400 and tr.clock &lt; 1590940799
+        group by cbs.sys_name
+    </select>
+
+    <select id="getApplicationMemory" resultType="map">
+        select cbs.sys_name bussise,
+        round(avg(tr.value_avg),2) valueAvg,
+        round(max(tr.value_max),2) valueMax
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and instr(ch.server_usage, '数据库') = 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+        and instr(it.key_, 'vm.memory.pused') > 0
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        and tr.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and tr.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        -- and tr.clock > 1588262400 and tr.clock &lt; 1590940799
+        group by cbs.sys_name
+    </select>
+
+
+    <select id="getDatabaseDisk" resultType="map">
+        select cbs.sys_name bussise,
+        round(avg(tr.value_avg),2) valueAvg,
+        round(max(tr.value_max),2) valueMax
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and instr(ch.server_usage, '数据库') > 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+        -- and instr(it.key_, 'vm.memory.pused') > 0
+        and it.key_ like '%vfs.fs.size[%,pused]'
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        and tr.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and tr.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        -- and tr.clock > 1588262400 and tr.clock &lt; 1590940799
+        group by cbs.sys_name
+    </select>
+
+    <select id="getApplicationDisk" resultType="map">
+        select cbs.sys_name bussise,
+        round(avg(tr.value_avg),2) valueAvg,
+        round(max(tr.value_max),2) valueMax
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and instr(ch.server_usage, '数据库') = 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+        -- and instr(it.key_, 'vm.memory.pused') > 0
+        and it.key_ like '%vfs.fs.size[%,pused]'
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        and tr.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and tr.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        -- and tr.clock > 1588262400 and tr.clock &lt; 1590940799
+        group by cbs.sys_name
+    </select>
+
+
+    <select id="getApplicationCpuTOP3" resultType="map">
+        select * from (select c.sys_name,
+        c.manage_ip,
+        c.value_avg,
+        c.value_max,
+        row_number() over(partition by c.sys_name order by c.value_avg desc) rn
+        from (select cbs.sys_name,
+        ch.manage_ip,
+        round(avg(tr.value_avg),2) value_avg,
+        round(max(tr.value_max),2) value_max
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+       -- and (instr(it.key_, 'vm.memory.pused') > 0 or instr(it.key_, 'vm.memory.size[pused]') > 0)
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+         and instr(it.key_, 'system.cpu.util.use') > 0
+        and instr(ch.server_usage, '数据库') = 0
+        and tr.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by cbs.sys_name, ch.manage_ip)c) t where t.rn lt;= 3
+    </select>
+    <select id="getDatabaseCpuTOP3" resultType="map">
+        select * from (select c.sys_name,
+        c.manage_ip,
+        c.value_avg,
+        c.value_max,
+        row_number() over(partition by c.sys_name order by c.value_avg desc) rn
+        from (select cbs.sys_name,
+        ch.manage_ip,
+        round(avg(tr.value_avg),2) value_avg,
+        round(max(tr.value_max),2) value_max
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+       -- and (instr(it.key_, 'vm.memory.pused') > 0 or instr(it.key_, 'vm.memory.size[pused]') > 0)
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+         and instr(it.key_, 'system.cpu.util.use') > 0
+        and instr(ch.server_usage, '数据库') > 0
+        and tr.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by cbs.sys_name, ch.manage_ip)c) t where t.rn lt;= 3
+    </select>
+    <select id="getApplicationMemoryTOP3" resultType="map">
+        select * from (select c.sys_name,
+        c.manage_ip,
+        c.value_avg,
+        c.value_max,
+        row_number() over(partition by c.sys_name order by c.value_avg desc) rn
+        from (select cbs.sys_name,
+        ch.manage_ip,
+        round(avg(tr.value_avg),2) value_avg,
+        round(max(tr.value_max),2) value_max
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+        and (instr(it.key_, 'vm.memory.pused') > 0 or instr(it.key_, 'vm.memory.size[pused]') > 0)
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        and instr(ch.server_usage, '数据库') = 0
+        and tr.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by cbs.sys_name, ch.manage_ip)c) t where t.rn lt;= 3
+    </select>
+    <select id="getDatabaseMemoryTOP3" resultType="map">
+        select * from (select c.sys_name,
+        c.manage_ip,
+        c.value_avg,
+        c.value_max,
+        row_number() over(partition by c.sys_name order by c.value_avg desc) rn
+        from (select cbs.sys_name,
+        ch.manage_ip,
+        round(avg(tr.value_avg),2) value_avg,
+        round(max(tr.value_max),2) value_max
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+        and (instr(it.key_, 'vm.memory.pused') > 0 or instr(it.key_, 'vm.memory.size[pused]') > 0)
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+       --  and instr(it.key_, 'system.cpu.util.use') > 0
+        and instr(ch.server_usage, '数据库') > 0
+        and tr.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by cbs.sys_name, ch.manage_ip)c) t where t.rn lt;= 3
+    </select>
+    <select id="getApplicationDiskTOP3" resultType="map">
+        select * from (select c.sys_name,
+        c.manage_ip,
+        c.value_avg,
+        c.value_max,
+        row_number() over(partition by c.sys_name order by c.value_avg desc) rn
+        from (select cbs.sys_name,
+        ch.manage_ip,
+        round(avg(tr.value_avg),2) value_avg,
+        round(max(tr.value_max),2) value_max
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+        -- and (instr(it.key_, 'vm.memory.pused') > 0 or instr(it.key_, 'vm.memory.size[pused]') > 0)
+        and it.key_ like '%vfs.fs.size[%,pused]'
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        and instr(ch.server_usage, '数据库') = 0
+        and tr.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by cbs.sys_name, ch.manage_ip)c) t where t.rn lt;= 3
+    </select>
+    <select id="getDatabaseDiskTOP3" resultType="map">
+        select * from (select c.sys_name,
+        c.manage_ip,
+        c.value_avg,
+        c.value_max,
+        row_number() over(partition by c.sys_name order by c.value_avg desc) rn
+        from (select cbs.sys_name,
+        ch.manage_ip,
+        round(avg(tr.value_avg),2) value_avg,
+        round(max(tr.value_max),2) value_max
+        from cath_thinkops.ci_host ch
+        left join cath_thinkops.ci_busi_system cbs
+        on ch.sys_id = cbs.id
+        left join cath_thinkops.idc_res_relation irr
+        on ch.id = irr.id
+        left join zabbix.items it
+        on irr.zb_id = it.hostid
+        left join zabbix.trends tr
+        on it.itemid = tr.itemid
+        where instr(ch.mainframe_type, '机') > 0
+        and ch.del_flag = 0
+        and (instr(cbs.sys_name, '激活') > 0 or instr(cbs.sys_name, '运营流程') > 0 or instr(cbs.sys_name, 'OA门户') > 0 or instr(cbs.sys_name, 'ODS') > 0)
+       -- and (instr(it.key_, 'vm.memory.pused') > 0 or instr(it.key_, 'vm.memory.size[pused]') > 0)
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+         and instr(it.key_, 'system.cpu.util.use') > 0
+        and instr(ch.server_usage, '数据库') > 0
+        and tr.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by cbs.sys_name, ch.manage_ip)c) t where t.rn lt;= 3
+    </select>
+
+
+
+
+    <select id="getJifeiCpu" resultType="map">
+        select bhr.assemble_module bussise,
+        round(avg(t.value_avg), 4) as valueAvg,
+        round(max(t.value_max), 4) as valueMax
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+         and instr(it.key_, 'system.cpu.util.use') > 0
+        -- and instr(it.key_, 'vm.memory.pused') > 0
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+        and bhr.business = '计费'
+        and t.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and t.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module
+    </select>
+
+    <select id="getJifeiMemory" resultType="map">
+        select bhr.assemble_module bussise,
+        round(avg(t.value_avg), 4) as valueAvg,
+        round(max(t.value_max), 4) as valueMax
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+         and instr(it.key_, 'vm.memory.pused') > 0
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+        and bhr.business = '计费'
+        and t.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and t.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module
+    </select>
+
+    <select id="getJifeiDisk" resultType="map">
+        select bhr.assemble_module bussise,
+        round(avg(t.value_avg), 4) as valueAvg,
+        round(max(t.value_max), 4) as valueMax
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        -- and instr(it.key_, 'vm.memory.pused') > 0
+         and it.key_ like '%vfs.fs.size[%,pused]'
+        and bhr.business = '计费'
+        and t.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and t.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module
+    </select>
+
+    <select id="getCrmCpu" resultType="map">
+        select bhr.assemble_module bussise,
+        round(avg(t.value_avg), 4) as valueAvg,
+        round(max(t.value_max), 4) as valueMax
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+         and instr(it.key_, 'system.cpu.util.use') > 0
+        -- and instr(it.key_, 'vm.memory.pused') > 0
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+        and bhr.business = 'CRM'
+        and t.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and t.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module
+    </select>
+
+    <select id="getCrmMemory" resultType="map">
+        select bhr.assemble_module bussise,
+        round(avg(t.value_avg), 4) as valueAvg,
+        round(max(t.value_max), 4) as valueMax
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        and instr(it.key_, 'vm.memory.pused') > 0
+        -- and it.key_ like '%vfs.fs.size[%,pused]'
+        and bhr.business = 'CRM'
+        and t.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and t.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module
+    </select>
+
+    <select id="getCrmDisk" resultType="map">
+        select bhr.assemble_module bussise,
+        round(avg(t.value_avg), 4) as valueAvg,
+        round(max(t.value_max), 4) as valueMax
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        -- and instr(it.key_, 'vm.memory.pused') > 0
+         and it.key_ like '%vfs.fs.size[%,pused]'
+        and bhr.business = 'CRM'
+        and t.clock >
+        (trunc(add_months(sysdate,-1),'month') -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        and t.clock &lt; (trunc(add_months(sysdate,0),'month')-
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module
+    </select>
+
+
+    <select id="getJifeiCpuTop3" resultType="map">
+        select c.module bussise,
+        c.ip ip,
+        c.value_avg valueAvg,
+        c.value_max valueMax
+        from (select bhr.assemble_module module,
+        bhr.ip ip,
+        round(avg(t.value_avg), 4) as value_avg,
+        round(max(t.value_max), 4) as value_max,
+        row_number() over(partition by bhr.assemble_module order by avg(t.value_avg) desc) rn
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+        --and instr(it.key_, 'vm.memory.pused') > 0
+        and bhr.business = '计费'
+        and instr(it.key_, 'system.cpu.util.use') > 0
+        and t.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module, bhr.ip) c where c.rn &lt;= 3
+    </select>
+
+    <select id="getJifeiMemoryTop3" resultType="map">
+        select c.module bussise,
+        c.ip ip,
+        c.value_avg valueAvg,
+        c.value_max valueMax
+        from (select bhr.assemble_module module,
+        bhr.ip ip,
+        round(avg(t.value_avg), 4) as value_avg,
+        round(max(t.value_max), 4) as value_max,
+        row_number() over(partition by bhr.assemble_module order by avg(t.value_avg) desc) rn
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+        and instr(it.key_, 'vm.memory.pused') > 0
+        and bhr.business = '计费'
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        and t.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module, bhr.ip) c where c.rn &lt;= 3
+    </select>
+
+    <select id="getCrmCpuTop3" resultType="map">
+        select c.module bussise,
+        c.ip ip,
+        c.value_avg valueAvg,
+        c.value_max valueMax
+        from (select bhr.assemble_module module,
+        bhr.ip ip,
+        round(avg(t.value_avg), 4) as value_avg,
+        round(max(t.value_max), 4) as value_max,
+        row_number() over(partition by bhr.assemble_module order by avg(t.value_avg) desc) rn
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+        --and instr(it.key_, 'vm.memory.pused') > 0
+        and bhr.business = 'CRM'
+        and instr(it.key_, 'system.cpu.util.use') > 0
+        and t.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module, bhr.ip) c where c.rn &lt;= 3
+    </select>
+
+    <select id="getCrmMemoryTop3" resultType="map">
+        select c.module bussise,
+        c.ip ip,
+        c.value_avg valueAvg,
+        c.value_max valueMax
+        from (select bhr.assemble_module module,
+        bhr.ip ip,
+        round(avg(t.value_avg), 4) as value_avg,
+        round(max(t.value_max), 4) as value_max,
+        row_number() over(partition by bhr.assemble_module order by avg(t.value_avg) desc) rn
+        from zabbix.bss_skywing_cloud bhr
+        left join zabbix.interface itf
+        on bhr.ip = itf.ip
+        left join zabbix.items it
+        on itf.hostid = it.hostid
+        left join zabbix.trends t
+        on it.itemid = t.itemid
+        where instr(bhr.timeuse, '一期') > 0
+        and instr(it.key_, 'vm.memory.pused') > 0
+        and bhr.business = 'CRM'
+        -- and instr(it.key_, 'system.cpu.util.use') > 0
+        and t.clock >
+        (sysdate - 30 -
+        TO_DATE('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS')) * 86400
+        group by bhr.assemble_module, bhr.ip) c where c.rn &lt;= 3
+    </select>
+
+</mapper>
