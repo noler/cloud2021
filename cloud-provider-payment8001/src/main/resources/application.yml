@@ -10,7 +10,11 @@ spring:
     url: jdbc:mysql://localhost:3306/mycloud?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: root
-
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1
 eureka:
   client:
     #表示是否将自己注册进Eurekaserver默认为true。
